@@ -1,0 +1,41 @@
+class Solution {
+    public int countPaths(int n, int[][] roads) {
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b)-> a[1]-b[1]);
+        int[] dist = new int[n];
+        int[] ways = new int[n];
+        List<List<int[]>> adj = new ArrayList<>();
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<int[]>());
+        }
+        for(int[] road: roads){
+            int u = road[0];
+            int v = road[1];
+            int wt = road[2];
+            adj.get(u).add(new int[]{v, wt});
+            adj.get(v).add(new int[]{u, wt});
+        }
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        ways[0]=1;
+        dist[0]=0;
+        pq.add(new int[]{0,0});
+        int mod = 1000000007; 
+        while(!pq.isEmpty()){
+            int[] p = pq.poll();
+            int currNode = p[0];
+            int currWt = p[1];
+            List<int[]> neighbour = adj.get(currNode);
+            for(int[] neigh: neighbour){
+                int neighbourNode = neigh[0];
+                int neighbourWt = neigh[1];
+                if(currWt + neighbourWt< dist[neighbourNode]){
+                    dist[neighbourNode]= currWt + neighbourWt;
+                    ways[neighbourNode]= ways[currNode];
+                    pq.add(new int[]{neighbourNode, currWt+neighbourWt});
+                }else if(currWt + neighbourWt == dist[neighbourNode]){
+                    ways[neighbourNode] = (ways[neighbourNode]+ways[currNode])%mod;
+                }
+            }
+        }
+        return ways[n-1];
+    }
+}

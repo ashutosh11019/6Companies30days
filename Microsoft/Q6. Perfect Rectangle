@@ -1,0 +1,41 @@
+class Solution {
+    public boolean isRectangleCover(int[][] rectangles) {
+        if (rectangles.length == 0 || rectangles[0].length == 0) return false;
+        Set<String> set = new HashSet<String>();
+        int area = 0;
+        int minX = Integer.MAX_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxA = Integer.MIN_VALUE;
+        int maxB = Integer.MIN_VALUE;
+        for (int[] r : rectangles){
+            int x = r[0];
+            int y = r[1];
+            int a = r[2];
+            int b = r[3];
+            area += (x-a) * (y-b);
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxA = Math.max(maxA, a);
+            maxB = Math.max(maxB, b);
+            String bottomLeft = x+" "+y;
+            String topLeft = x+" "+b;
+            String bottomRight = a+" "+y;
+            String topRight = a+" "+b;
+            if (!set.contains(bottomLeft)) set.add(bottomLeft);
+            else set.remove(bottomLeft);
+            if (!set.contains(topLeft)) set.add(topLeft);
+            else set.remove(topLeft);
+            if (!set.contains(bottomRight)) set.add(bottomRight);
+            else set.remove(bottomRight);
+            if (!set.contains(topRight)) set.add(topRight);
+            else set.remove(topRight);
+        }
+        String fullBottomLeft = minX+" "+minY;
+        String fullTopLeft = minX+" "+maxB;
+        String fullBottomRight = maxA+" "+minY;
+        String fullTopRight = maxA+" "+maxB;
+        if (set.size() != 4 || !set.contains(fullBottomLeft) || !set.contains(fullTopLeft) || !set.contains(fullBottomRight) || !set.contains(fullTopRight)) return false;
+        int fullArea = (minX-maxA) * (minY-maxB);
+        return area == fullArea;
+    }
+}

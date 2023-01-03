@@ -1,0 +1,53 @@
+class Solution {
+    public long numberOfPairs(int[] nums1, int[] nums2, int diff) {
+        int n=nums1.length;
+        int[] nums = new int[n];
+        for(int i=0;i<n;i++) nums[i]=nums1[i]-nums2[i];
+        ArrayList<Integer> sorted = new ArrayList<>();
+        sorted.add(nums[n-1]);
+        long c=0;
+        for(int i=n-2;i>=0;i--){
+            c+=bs(nums[i]-diff, sorted);
+            insert(nums[i], sorted);
+        }
+        return c;
+    }
+
+    static int bs(int x, ArrayList<Integer> sorted){
+        if (x<=sorted.get(0)) return sorted.size();
+        if (x>sorted.get(sorted.size()-1)) return 0;
+        int low = 0, high = sorted.size()-1;
+        while (low<high){
+            if (high-low==1) break;
+            int mid = low+(high-low)/2;
+            if (sorted.get(mid)<x) low = mid;
+            else high = mid;
+        }
+        return sorted.size()-high;
+    }
+
+    static void insert(int num, ArrayList<Integer> sorted){
+        if (num>=sorted.get(sorted.size()-1)){
+            sorted.add(num);
+            return;
+        }
+        if (num<=sorted.get(0)){
+            sorted.add(0, num);
+            return;
+        }
+        int low=0, high=sorted.size()-1;
+        while (low<=high){
+            if (high==low+1){
+                sorted.add(high, num);
+                break;
+            }
+            int mid = low+(high-low)/2;
+            if (sorted.get(mid)==num){
+                sorted.add(mid, num);
+                break;
+            }else if (sorted.get(mid)<num) low = mid;
+            else high = mid;
+        }
+        return;        
+    }
+}
