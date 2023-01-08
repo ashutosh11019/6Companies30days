@@ -1,0 +1,30 @@
+class Solution {
+    public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
+        int l1=len(p1[0],p1[1],p2[0],p2[1]);
+        int l2=len(p1[0],p1[1],p3[0],p3[1]);
+        int l3=len(p1[0],p1[1],p4[0],p4[1]);
+        int l4=len(p2[0],p2[1],p3[0],p3[1]);
+        int l5=len(p2[0],p2[1],p4[0],p4[1]);
+        int l6=len(p3[0],p3[1],p4[0],p4[1]);
+        
+        int min=Math.min(l1,Math.min(l2,Math.min(l3,Math.min(l4,Math.min(l5,l6)))));
+        int c1=0, c2=0;
+        if(l1==min) c1++;
+        else if(l1==2*min) c2++;
+        if(l2==min) c1++;
+        else if(l2==2*min) c2++;
+        if(l3==min) c1++;
+        else if(l3==2*min) c2++;
+        if(l4==min) c1++;
+        else if(l4==2*min) c2++;
+        if(l5==min) c1++;
+        else if(l5==2*min) c2++;
+        if(l6==min) c1++;
+        else if(l6==2*min) c2++;
+        return c1==4 && c2==2;
+    }
+
+    public static int len(int x1, int y1, int x2, int y2){
+        return (int)(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+    }
+}

@@ -1,0 +1,37 @@
+class Solution {
+    static int max;
+    static List<Integer> res;
+
+    public int[] maximumBobPoints(int numArrows, int[] aliceArrows) {
+        max=0;
+        solve(11, numArrows, 0, aliceArrows, new ArrayList<>());
+        System.out.println(res);
+        int[] ans = new int[12];
+        int sum=0;
+        for(int i = 0; i < res.size(); i++){
+            ans[11 - i] = res.get(i);
+            sum += res.get(i);
+        }
+        ans[0] += numArrows - sum;
+        return ans;
+    }
+
+    static void solve(int curr, int arrows, int score, int[] A, ArrayList<Integer> temp){
+        if(arrows < 0){
+            return;
+        }
+        if(curr == 0 || arrows == 0){
+            if(score > max){
+                max = score;
+                res = new ArrayList<>(temp);
+            }
+            return;
+        }
+        temp.add(A[curr] + 1);
+        solve(curr - 1, arrows - A[curr] - 1, score + curr, A, temp);
+        temp.remove(temp.size() - 1);
+        temp.add(0);
+        solve(curr - 1, arrows, score, A, temp);
+        temp.remove(temp.size() - 1);
+    }
+}
