@@ -1,0 +1,38 @@
+class Solution {
+    public int[] getBiggestThree(int[][] grid) {
+        HashSet<Integer> store = new HashSet<>();
+        int m=grid.length, n=grid[0].length, mxSize=(Math.min(m,n)+1)/2;
+        for(int sz=1;sz<=mxSize;sz++){
+            int r=sz-1, cl=n-sz*2+1, rl=m-sz;
+            while(r<=rl){
+                int c=0;
+                while(c<=cl){
+                    int sum=grid[r][c];
+                    int tr=r-1,tc=c+1,tsz=sz-1;
+                    while(tsz-->0) sum+=grid[tr--][tc++];
+                    tr+=2;tsz=sz-1;
+                    while(tsz-->0) sum+=grid[tr++][tc++];
+                    tc-=2;tsz=sz-1;
+                    while(tsz-->0) sum+=grid[tr++][tc--];
+                    tr-=2;tsz=sz-2;
+                    while(tsz-->0) sum+=grid[tr--][tc--];
+                    store.add(sum);
+                    c++;
+                }
+                r++;
+            }
+        }
+        ArrayList<Integer> arr =new ArrayList<>();
+        for(int num:store) arr.add(num);
+        Collections.sort(arr);
+        int N=0;
+        if(arr.size()>=3) N=3;
+        else N=arr.size();
+        int[] res = new int[N];
+        for(int i=0;i<N;i++){
+            int j=arr.size()-1-i;
+            res[i]=arr.get(j);
+        }
+        return res;
+    }
+}

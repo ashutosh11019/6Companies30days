@@ -1,0 +1,45 @@
+class Tran{
+    String name;
+    int time;
+    int amount;
+    String city;
+    Tran(String name, int time, int amount, String city){
+        this.name = name;
+        this.time = time;
+        this.amount = amount;
+        this.city = city;
+    }
+}
+class Solution {
+    public List<String> invalidTransactions(String[] transactions) {
+        List<String> result = new ArrayList<>();
+        Map<String, List<Tran>> map = new HashMap<>();
+        
+        for(int i=0; i<transactions.length; i++){
+            String[] values = transactions[i].split(",");
+            Tran t = new Tran(values[0], Integer.valueOf(values[1]), Integer.valueOf(values[2]), values[3]);
+            map.putIfAbsent(t.name, new ArrayList<>());
+            map.get(t.name).add(t);
+        }
+        for(int i=0; i<transactions.length; i++){
+            String[] values = transactions[i].split(",");
+            Tran t = new Tran(values[0], Integer.valueOf(values[1]), Integer.valueOf(values[2]), values[3]);
+            if(!isInvalid(t, map.getOrDefault(t.name, new ArrayList<>()))){
+                result.add(transactions[i]);
+            }
+        }
+        return result;
+    }
+
+    public boolean isInvalid(Tran t, List<Tran> list){
+        if(t.amount > 1000){
+			return false;
+		}
+        for(Tran other : list){
+            if(Math.abs(other.time - t.time) <= 60 && !other.city.equals(t.city)){
+				return false;
+			}
+        }
+        return true;
+    }
+}

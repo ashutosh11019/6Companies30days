@@ -1,0 +1,24 @@
+class Solution {
+    public int maximumGood(int[][] statements) {
+        int n = statements.length, ans = 0;
+        for (int num = 1 << n; num < 1 << (n + 1); num++) {
+            String s = Integer.toBinaryString(num).substring(1);
+            if (check(s, statements, n)) {
+                int count = Integer.bitCount(Integer.parseInt(s, 2));
+                ans = Math.max(ans, count);
+            }
+        }
+        return ans;
+    }
+
+    static boolean check(String s, int[][] statements, int n) {
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == '0') continue;
+            for (int j = 0; j < n; j++) {
+                if (statements[i][j] == 2) continue;
+                if ((statements[i][j] == 1 && s.charAt(j) == '0') || (statements[i][j] == 0 && s.charAt(j) == '1')) return false;
+            }
+        }
+        return true;
+    }
+}
