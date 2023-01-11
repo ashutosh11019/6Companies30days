@@ -1,0 +1,28 @@
+class Solution {
+    public int magicalString(int n) {
+        String str = "122";
+        int flag = 2, ans = 1;
+        while(str.length() < n){
+            if(str.charAt(flag) == '1'){
+                if(str.charAt(str.length()-1) == '1'){
+                    str += '2';
+                }else{
+                    str += '1';
+                    ans++;
+                }
+            }else{
+                if(str.charAt(str.length()-1)== '1'){
+                    str += "22";
+                }else{
+                    str += "11";
+                    ans += 2;
+                }
+            }
+            flag++;
+        }
+        if(str.length() > n && str.charAt(str.length()-1) == '1'){
+            ans--;
+        }
+        return ans;
+    }
+}
