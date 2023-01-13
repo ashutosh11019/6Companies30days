@@ -1,0 +1,46 @@
+class StockPrice {
+    static Map<Integer, Integer> map;
+    static TreeMap<Integer, Integer> p;
+    static int max;
+
+    public StockPrice() {
+        map = new HashMap<>();
+        p = new TreeMap<>();
+        max = Integer.MIN_VALUE;
+    }
+    
+    public void update(int timestamp, int price) {
+        final var pre = map.get(timestamp);
+        if (pre != null) {
+            final var c = p.remove(pre);
+            if (c > 1) {
+                p.put(pre, c - 1);
+            }
+        }
+        final var n = p.get(price);
+        p.put(price, n == null ? 1 : n + 1);
+        map.put(timestamp, price);
+        if (timestamp > max) max = timestamp;
+    }
+
+    public int current() {
+        return map.get(max);
+    }
+
+    public int maximum() {
+        return p.lastKey();
+    }
+
+    public int minimum() {
+        return p.firstKey();
+    }
+}
+
+/**
+ * Your StockPrice object will be instantiated and called as such:
+ * StockPrice obj = new StockPrice();
+ * obj.update(timestamp,price);
+ * int param_2 = obj.current();
+ * int param_3 = obj.maximum();
+ * int param_4 = obj.minimum();
+ */
