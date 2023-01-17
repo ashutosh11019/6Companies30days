@@ -1,0 +1,42 @@
+class Solution {
+    public int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+        int n=price.size();
+        int offers=special.size();
+        Map<List<Integer>,Integer>hs=new HashMap<List<Integer>,Integer>();//For memoization
+        return getResult(price,special,needs,n,offers,hs);
+    }
+
+    int getResult(List<Integer> price, List<List<Integer>> special, List<Integer> needs,int n,int offers,Map<List<Integer>,Integer>hs){
+       boolean done=true;
+        for(int i=0;i<n;i++){
+            if(needs.get(i)!=0){done=false;break;};
+        }
+        if(done) return 0;
+        if(hs.containsKey(needs))return hs.get(needs);
+        int cost=Integer.MAX_VALUE;
+        for(int i=0;i<offers;i++){
+            boolean isValid=isOfferValid(special,i,needs,n);
+            if(isValid){
+                List<Integer>newNeeds=new ArrayList<>();
+                for(int j=0;j<n;j++){
+                    newNeeds.add(needs.get(j)-special.get(i).get(j));
+                }
+                cost=Math.min(cost,special.get(i).get(n)+getResult(price,special,newNeeds,n,offers,hs));
+            }
+            int tempPrice=0;
+            for(int k=0;k<n;k++){
+                tempPrice=tempPrice+needs.get(k)*price.get(k);
+            }
+            cost=Math.min(tempPrice,cost);
+        }
+        hs.put(needs,cost);
+        return cost;
+    }
+
+    boolean isOfferValid( List<List<Integer>> special,int offer,List<Integer>needs,int n){
+        for(int i=0;i<n;i++){
+            if(needs.get(i)<special.get(offer).get(i))return false;
+        }
+        return true;
+    }
+}
