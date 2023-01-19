@@ -1,0 +1,56 @@
+class Pair{
+    int first, second;
+    Pair(int first, int second){
+        this.first=first;
+        this.second=second;
+    }
+}
+class comp implements Comparator<Pair>{
+    public int compare(Pair p1, Pair p2){
+        if(p1.second < p2.second) return 1;
+        else if(p1.second > p2.second) return -1;
+        else return 0;
+    }
+}
+class Solution {
+    public int[] rearrangeBarcodes(int[] barcodes) {
+        int n=barcodes.length, i=0;
+        int[] ans = new int[n];
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int j=0;j<n;j++){
+            map.put(barcodes[j], map.getOrDefault(barcodes[j],0)+1);
+        }
+        // System.out.println(map);
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new comp());
+        for(Map.Entry<Integer, Integer> entry: map.entrySet()){
+            pq.add(new Pair(entry.getKey(),entry.getValue()));
+        }
+        System.out.println(pq.peek().first);
+        while(!pq.isEmpty()){
+            System.out.println(pq.peek().first+" "+pq.peek().second);
+            Pair p = pq.remove();
+            if(i==0){
+                ans[i]=p.first;
+                i++;
+                p.second=p.second-1;
+                if(p.second != 0) pq.add(p);
+            }else{
+                if(ans[i-1]==p.first){
+                    Pair cur = pq.remove();
+                    ans[i]=cur.first;
+                    i++;
+                    cur.second=cur.second-1;
+                    if(cur.second != 0) pq.add(cur);
+                    pq.add(p);
+                }else{
+                    ans[i]=p.first;
+                    i++;
+                    p.second=p.second-1;
+                    if(p.second != 0) pq.add(p);
+                }
+            }
+            
+        }
+        return ans;
+    }
+}
