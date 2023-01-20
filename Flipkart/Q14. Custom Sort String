@@ -1,0 +1,19 @@
+class Solution {
+    public String customSortString(String order, String s) {
+        int[] count = new int[26];
+        for(int i=0;i<s.length();i++) count[s.charAt(i)-'a']++;
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<order.length();i++){
+            char ch=order.charAt(i);
+            int j=count[ch-'a'];
+            count[ch-'a']=0;
+            while(j-->0) sb.append(ch);
+        }
+        for(int i=0;i<26;i++){
+            int j=count[i];
+            char ch=(char)(i+'a');
+            while(j-->0) sb.append(ch);
+        }
+        return sb.toString();
+    }
+}

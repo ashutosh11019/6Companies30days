@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    static HashMap<TreeNode,Integer> map;
+
+    public int rob(TreeNode root) {
+        map = new HashMap<>();
+        return solve(root);
+    }
+
+    
+    static int solve(TreeNode root){
+        if(root==null) return 0;
+        if(map.containsKey(root)) return map.getOrDefault(root, 0);
+        int l=0, r=0;
+        if(root.left!=null) l=solve(root.left.left)+solve(root.left.right);
+        if(root.right!=null) r=solve(root.right.left)+solve(root.right.right);
+        map.put(root, Math.max(root.val+l+r,solve(root.left)+solve(root.right)));
+        return map.get(root);
+    }
+}
