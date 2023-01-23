@@ -1,0 +1,13 @@
+class Solution {
+    public int maxConsecutive(int bottom, int top, int[] special) {
+        Arrays.sort(special);
+        int max=0, c=0, prev=bottom;
+        for(int num: special){
+            c=num-prev;
+            prev=num+1;
+            max=Math.max(max,c);
+        }
+        max=Math.max(max, top-prev+1);
+        return max;
+    }
+}

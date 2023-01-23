@@ -1,0 +1,17 @@
+class Solution {
+    public int distinctEchoSubstrings(String text) {
+        Set a=new HashSet();
+        for(int i=0;i<text.length();i++){
+            for(int j=i+1;j<text.length();j++){
+                if(text.charAt(i)==text.charAt(j)){
+                    if(j+j-i<=text.length()){
+                        String s1=text.substring(i,j);
+                        String s2=text.substring(j,j+j-i);
+                        if(s1.equals(s2)) a.add(s1);
+                    }
+                }
+            }
+        }
+        return a.size();
+    }
+}
