@@ -1,0 +1,25 @@
+class Solution {
+    static int max;
+
+    public int maxCompatibilitySum(int[][] students, int[][] mentors) {
+        int[] vis = new int[students.length];
+        max=0;
+		solve(vis, students, mentors, 0, 0);
+		return max;
+    }
+
+    public static void solve(int[] vis, int[][] students, int[][] mentors, int pos, int s){
+		if(pos >= students.length){
+			max = Math.max(max, s);
+			return;
+		}
+		for(int i = 0; i < mentors.length; i++)
+			if(vis[i]==0){
+				vis[i] = 1;
+                int score = 0;
+                for(int j = 0; j < mentors[i].length; j++) if(students[pos][j] == mentors[i][j]) score += 1;
+				solve(vis, students, mentors, pos + 1, s + score);
+				vis[i] = 0;
+			}
+	}
+}
