@@ -1,0 +1,22 @@
+class Solution {
+    static int max;
+    
+    public int maxUniqueSplit(String s) {
+        Set<String> set = new HashSet<>();
+        max=0;
+        backtrack(s, 0, set);
+        return max;
+    }
+
+    public static void backtrack(String s, int index, Set<String>set){
+        if(index == s.length()) return;
+        for (int i = index + 1; i <= s.length(); i++) {
+            String sub = s.substring(index, i);
+            if (set.contains(sub)) continue;
+            set.add(sub);
+            max = Math.max(max, set.size());
+            backtrack(s, i, set);
+            set.remove(sub);
+        }
+    }
+}

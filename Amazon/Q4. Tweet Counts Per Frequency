@@ -1,0 +1,49 @@
+class TweetCounts {
+    Map<String, TreeMap<Integer, Integer>> map;
+
+    public TweetCounts() {
+        map = new HashMap<>();
+    }
+    
+    public void recordTweet(String tweetName, int time) {
+         map.computeIfAbsent(tweetName, k -> new TreeMap<Integer, Integer>()).put(time, map.get(tweetName).getOrDefault(time, 0) + 1);
+    }
+    
+    public List<Integer> getTweetCountsPerFrequency(String freq, String tweetName, int startTime, int endTime) {
+        List<Integer> output = new ArrayList<>();
+        int offset = getOffset(freq);
+        while(startTime <= endTime) {
+            output.add(getTweetCount(startTime, Math.min(startTime + offset, endTime+1), tweetName));
+            startTime += offset;
+        }
+        return output;
+    }
+
+    public int getTweetCount(int startTime, int endTime, String tweetName) {
+        TreeMap<Integer, Integer> tMap = map.get(tweetName);
+        int count = 0;
+        Integer time = tMap.ceilingKey(startTime);
+        while(time != null && time < endTime) {
+            count += tMap.get(time);
+            time = tMap.ceilingKey(time+1);
+        }
+        return count;
+    }
+        
+    public int getOffset(String freq) {
+        int offset = 0;
+        switch(freq) {
+            case "minute": return 60;
+            case "hour": return 3600;
+            case "day": return 86400;
+            default: return 0;
+        }
+    }
+}
+
+/**
+ * Your TweetCounts object will be instantiated and called as such:
+ * TweetCounts obj = new TweetCounts();
+ * obj.recordTweet(tweetName,time);
+ * List<Integer> param_2 = obj.getTweetCountsPerFrequency(freq,tweetName,startTime,endTime);
+ */
