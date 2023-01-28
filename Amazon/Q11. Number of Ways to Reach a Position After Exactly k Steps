@@ -1,0 +1,17 @@
+class Solution {
+    public static int helper(int s,int e,int k,int[][] dp,int b){
+        if(s==e && k==0) return 1;
+        if(k==0 ) return 0;
+        k-=1;
+        if(dp[s+b][k]!=-1) return dp[s+b][k];
+
+        return dp[s+b][k]=(helper(s-1,e,k,dp,b)+helper(s+1,e,k,dp,b))%1000000007;
+    }
+    
+    public int numberOfWays(int start, int end, int k) {
+        int b=Math.abs(start-k);
+        int[][] dp=new int[start+b+k+1][k];
+        for(int[] i:dp)Arrays.fill(i,-1);
+        return helper(start,end,k,dp,b);
+    }
+}

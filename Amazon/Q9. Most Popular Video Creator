@@ -1,0 +1,51 @@
+class Solution {
+    public List<List<String>> mostPopularCreator(String[] creators, String[] ids, int[] views) {
+        Map<String, Triplet> map = new HashMap<>();
+        for(int i=0;i<ids.length;i++){
+            if(map.containsKey(creators[i])){
+                Triplet t = map.get(creators[i]);
+                long pop=views[i]+t.pop;
+                if(t.view<views[i]){
+                    map.put(creators[i], new Triplet(ids[i], pop, views[i]));
+                }else if(t.view==views[i]){
+                    if(t.id.compareTo(ids[i])==0) map.put(creators[i], new Triplet(ids[i], pop, views[i]));
+                    else if(t.id.compareTo(ids[i])>0) map.put(creators[i], new Triplet(ids[i], pop, views[i]));
+                    else if(t.id.compareTo(ids[i])<0) map.put(creators[i], new Triplet(t.id, pop, t.view));
+                }else{
+                    map.put(creators[i], new Triplet(t.id, pop, t.view));
+                }
+            }else{
+                map.put(creators[i], new Triplet(ids[i], views[i], views[i]));
+            }
+        }
+        // System.out.println(map);
+        long max=0L;
+        for(Triplet t: map.values()){
+            max=Math.max(max, t.pop);
+        }
+        System.out.println(max);
+        List<List<String>> ans = new ArrayList<>();
+        for(Map.Entry<String, Triplet> entry: map.entrySet()){
+            Triplet t = entry.getValue();
+            System.out.println(t.id+" "+t.view+" "+t.pop);
+            if(max==t.pop){
+                List<String> list = new ArrayList<>();
+                list.add(entry.getKey());
+                list.add(t.id);
+                ans.add(list);
+            }
+        }
+        return ans;
+    }
+}
+
+class Triplet{
+    String id;
+    int view;
+    long pop;
+    Triplet(String id, long pop, int view){
+        this.id=id;
+        this.pop=pop;
+        this.view=view;
+    }
+}
