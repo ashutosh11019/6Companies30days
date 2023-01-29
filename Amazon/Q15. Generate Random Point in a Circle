@@ -1,0 +1,27 @@
+class Solution {
+    double radius;
+    double x_center;
+    double y_center;
+    Random r=new Random();
+
+    public Solution(double radius, double x_center, double y_center) {
+        this.radius=radius;
+        this.x_center=x_center;
+        this.y_center=y_center;
+    }
+    
+    public double[] randPoint() {
+        double angle=r.nextDouble(Math.PI*2);
+        double rad=Math.sqrt(r.nextDouble())*radius;
+        double[] ans=new double[2];
+        ans[0]=rad*Math.cos(angle)+x_center;
+        ans[1]=rad*Math.sin(angle)+y_center;
+        return ans;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(radius, x_center, y_center);
+ * double[] param_1 = obj.randPoint();
+ */
